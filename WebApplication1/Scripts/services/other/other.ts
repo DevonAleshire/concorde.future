@@ -1,5 +1,4 @@
 ﻿
 export default function () {
-
-console.log('omg')
+    return 'omg'
 }

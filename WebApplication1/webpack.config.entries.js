@@ -1,6 +1,6 @@
 ﻿function getEntries() {
     return {
-        'home-index': '.\\scripts\\index.ts'
+        'home-index': '.\\scripts\\pages\\home\\index.ts'
     }
 }
 

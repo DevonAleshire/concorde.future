@@ -5,6 +5,20 @@
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\pages\home\index.ts" />
+    <None Remove="Scripts\pages\home\__tests__\index.tests.ts" />
+    <None Remove="Scripts\services\other\other.ts" />
+    <None Remove="Scripts\services\other\__tests__\other.tests.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Scripts\pages\home\index.ts" />
+    <Content Include="Scripts\pages\home\__tests__\index.tests.ts" />
+    <Content Include="Scripts\services\other\other.ts" />
+    <Content Include="Scripts\services\other\__tests__\other.tests.ts" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
