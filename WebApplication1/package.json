@@ -1,0 +1,30 @@
+{
+  "name": "webapplication1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --env.prod --color",
+    "build-dev": "webpack --env.dev --color",
+    "watch": "webpack --env.dev --watch --progress --color"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/lodash": "^4.14.106",
+    "@types/underscore": "^1.8.8",
+    "lodash": "^4.17.5",
+    "underscore": "^1.8.3",
+    "webpack": "^4.2.0",
+    "bootstrap": "3.3.7",
+    "jquery": "2.2.0",
+    "jquery-validation": "1.14.0",
+    "jquery-validation-unobtrusive": "3.2.6"
+  },
+  "devDependencies": {
+    "ts-loader": "^4.1.0",
+    "typescript": "^2.7.2",
+    "webpack-cli": "^2.0.13"
+  }
+}
