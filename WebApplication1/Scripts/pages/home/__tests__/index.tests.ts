@@ -1,3 +1,14 @@
-﻿describe('home index page', function () {
-    
+﻿import 'jest'
+import { onLoad } from '../index'
+import otherSvc, { IOther } from '../../../services/other/other'
+import { getMockedFunctionRef } from '../../../testLibs/testUtilities'
+
+jest.mock('../../../services/other/other')
+
+describe('home index page', function () {
+    test('calls other service once', function () {
+        const getTextMock = getMockedFunctionRef(otherSvc.getText)
+        onLoad()
+        expect(getTextMock.mock.calls.length).toBe(1)
+    })
 })

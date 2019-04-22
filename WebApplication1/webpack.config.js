@@ -7,7 +7,7 @@ module.exports = function (env, argv) {
         output: {
             filename: function (chunkData) { return chunkData.chunk.name.replace(/\-/g, '/') + '.js'},
             path: path.resolve(__dirname, 'wwwroot/js/'),
-            libraryTarget: 'umd'
+            library: 'Page'
         },
         module: {
             rules: [

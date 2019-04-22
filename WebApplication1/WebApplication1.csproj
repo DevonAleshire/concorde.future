@@ -4,6 +4,7 @@
     <TargetFramework>net452</TargetFramework>
     <RuntimeIdentifier>win7-x86</RuntimeIdentifier>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>3.4.2</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>

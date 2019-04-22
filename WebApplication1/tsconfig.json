@@ -7,8 +7,17 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
+    "skipLibCheck": true,
+    "alwaysStrict": true,
+    "types": []
   },
   "compileOnSave": false,
+  "exclude": [
+    "**/__tests__/*.ts",
+    "node_modules",
+    "obj",
+    "bin"
+  ],
   "include": [
     "scripts"
   ]

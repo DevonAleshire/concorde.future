@@ -1,8 +1,9 @@
-﻿import omg from '../other'
+﻿import 'jest'
+import otherSvc from '../other'
 
 describe('other stuff', function () {
-    test('default function returns omg', function () {
-        const output = omg()
+    test('getText function returns omg', function () {
+        const output = otherSvc.getText()
         expect(output).toBe('omg')
     })
 })

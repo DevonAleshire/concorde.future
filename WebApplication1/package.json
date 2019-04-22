@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --colors --coverage",
+    "test-watch": "jest --colors --watchAll",
     "build": "webpack --env.prod --color",
     "build-dev": "webpack --env.dev --color",
     "watch": "webpack --env.dev --watch --progress --color"
@@ -28,7 +29,7 @@
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "ts-loader": "^4.1.0",
-    "typescript": "^3.4.4",
+    "typescript": "^3.4.2",
     "webpack": "^4.2.0",
     "webpack-cli": "^2.0.13"
   }
