@@ -13,19 +13,24 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^4.17.5",
-    "underscore": "^1.8.3",
     "bootstrap": "3.3.7",
+    "es-promise": "^1.0.3",
     "jquery": "2.2.0",
     "jquery-validation": "1.14.0",
-    "jquery-validation-unobtrusive": "3.2.6"
+    "jquery-validation-unobtrusive": "3.2.6",
+    "lodash": "^4.17.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "@types/es6-promise": "^3.3.0",
     "@types/jest": "^24.0.11",
     "@types/lodash": "^4.14.106",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
     "@types/underscore": "^1.8.8",
+    "csstype": "^2.6.4",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "ts-loader": "^4.1.0",

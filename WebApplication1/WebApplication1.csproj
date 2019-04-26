@@ -8,14 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Scripts\pages\home\index.ts" />
+    <None Remove="Scripts\pages\home\index.tsx" />
     <None Remove="Scripts\pages\home\__tests__\index.tests.ts" />
     <None Remove="Scripts\services\other\other.ts" />
     <None Remove="Scripts\services\other\__tests__\other.tests.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Scripts\pages\home\index.ts" />
+    <Content Include="Scripts\pages\home\index.tsx" />
     <Content Include="Scripts\pages\home\__tests__\index.tests.ts" />
     <Content Include="Scripts\services\other\other.ts" />
     <Content Include="Scripts\services\other\__tests__\other.tests.ts" />

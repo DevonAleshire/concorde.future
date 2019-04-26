@@ -1,6 +1,7 @@
 ﻿import 'jest'
 import { onLoad } from '../index'
-import otherSvc, { IOther } from '../../../services/other/other'
+// @ts-ignore
+import otherSvc from '@services/other/other'
 import { getMockedFunctionRef } from '../../../testLibs/testUtilities'
 
 jest.mock('../../../services/other/other')

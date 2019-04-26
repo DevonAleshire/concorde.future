@@ -9,7 +9,14 @@
     "moduleResolution": "node",
     "skipLibCheck": true,
     "alwaysStrict": true,
-    "types": []
+    "types": [],
+    "baseUrl": ".",
+    "paths": {
+      "@services\\*": [ "scripts\\services\\*" ],
+      "testLibs/*": [ "scripts/testLibs/*" ]
+    },
+    "jsx": "react",
+    "lib": ["es2015", "dom"]
   },
   "compileOnSave": false,
   "exclude": [
