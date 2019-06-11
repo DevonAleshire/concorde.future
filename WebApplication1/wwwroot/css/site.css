@@ -35,3 +35,42 @@ textarea {
         display: none;
     }
 }
+
+.todo {
+    color: #080;
+    border: 1px dashed #888;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+fieldset {
+    margin-top: 25px;
+}
+
+.ck-editor__editable_inline {
+    height: 200px;
+}
+
+#linkedEntitiesList i.unlink {
+    color: #800;
+    cursor: pointer;
+}
+
+#linkedEntityDialog #linkedEntityTypeList {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#linkedEntityDialog #allEntitiesList {
+    padding-left: 0px;
+}
+
+    #linkedEntityDialog #allEntitiesList li {
+        list-style-type: none;
+    }
+
+.test {
+    background-color: aquamarine;
+}
+

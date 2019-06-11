@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\components\DraftJSDemo.tsx" />
     <None Remove="Scripts\pages\home\index.tsx" />
     <None Remove="Scripts\pages\home\__tests__\index.tests.ts" />
     <None Remove="Scripts\services\other\other.ts" />
@@ -30,6 +31,9 @@
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\components\DraftJSDemo.tsx" />
   </ItemGroup>
 
 </Project>

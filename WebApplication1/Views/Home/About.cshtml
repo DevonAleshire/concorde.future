@@ -1,7 +1,67 @@
-﻿@{
-    ViewData["Title"] = "About";
-}
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+﻿<style>
+    #editor {
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 1em 1.5em 3em;
+        margin: .5em .5em;
+        font-family: Helvetica;
+        line-height: 1.4;
+        color: #2c3a51;
+        font-size: 16px;
+        text-align: left;
+        background-color: #fff;
+        min-height: 36%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        font-size: 90%;
+        height: 250px;
+    }
+</style>
+<link href="~/css/Draft.css" rel="stylesheet" />
 
-<p>Use this area to provide additional information.</p>
+<h2>Hello World</h2>
+<fieldset>
+    <legend>Linked Entities</legend>
+    <ul id="linkedEntitiesList"></ul>
+</fieldset>
+
+<div>
+    <fieldset>
+        <legend>Draft JS Editor 1</legend>
+        <div id="textEditor"></div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Draft JS Editor 2</legend>
+        <div id="textEditor"></div>
+    </fieldset>
+</div>
+
+<div id="linkedEntityDialog" style="display: none;">
+
+    <div id="linkedEntityTypeList">
+        <label for="linkedEntityType_existing">Link to Existing Entity</label>
+        <input type="radio" class="linkedEntityType" name="linkedEntityType" id="linkedEntityType_existing" value="existing" />
+
+        <label for="linkedEntityType_new">Link to New Entity</label>
+        <input type="radio" class="linkedEntityType" name="linkedEntityType" id="linkedEntityType_new" value="new" />
+    </div>
+
+    <div id="existingEntities">
+        <ul id="allEntitiesList"></ul>
+    </div>
+
+    <div id="newEntity">
+        <label for="newEntityName">Name:</label>
+        <input type="text" id="newEntityName" name="newEntityName" readonly />
+
+        <div class="todo">
+            // todo: more fields about the new entity
+        </div>
+    </div>
+
+</div>
+
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script src="~/js/draftjs/demo.js"></script>
