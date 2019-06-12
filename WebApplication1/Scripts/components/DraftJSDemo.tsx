@@ -1,7 +1,7 @@
 ﻿import 'babel-polyfill'
 import * as React from 'react';
 import * as ReactDOM from 'react-dom'
-import { Editor, EditorState, RichUtils, DraftHandleValue, ContentState, SelectionState, Modifier, DraftEntityMutability} from 'draft-js';
+import { Editor, EditorState, RichUtils, DraftHandleValue, ContentState, SelectionState, Modifier, CompositeDecorator } from 'draft-js';
 
 const allEntities = [
     { id: 101, name: "Bugs Bunny" },
@@ -20,8 +20,43 @@ const allEntities = [
     { id: 114, name: "Wile E Coyote" }
 ]
 
+const linkedEntities = [];
+
+const styles = {
+    linkedEntity: {
+        backgroundColor: 'lightgreen'
+    }
+}
+
 const DraftJsEditor = function DraftJsEditor() {
-    const [editorState, setEditorState] = React.useState(EditorState.createWithContent(ContentState.createFromText("\n\nEntity to link: Devon Aleshire")));//Initial State
+
+    //Set up composite decorator for linked entities
+    const entityStrategy = (contentBlock, callback, contentState) => {
+        contentBlock.findEntityRanges(
+            (character) => {
+                const entityKey = character.getEntity();
+                return (
+                    entityKey !== null &&
+                    contentState.getEntity(entityKey).getType() === 'LINKED-ENTITY'
+                );
+            },
+            callback
+        );
+    }
+    //Decorator Component
+    //https://draftjs.org/docs/advanced-topics-decorators.html#decorator-components
+    const entitySpan = (props) => {
+        const entity = props.contentState.getEntity(props.entityKey);
+        console.log(`Entity Id: ${entity.data.entityId}`)
+        return <span className="linked-entity" data-anchoroffset={entity.data.anchorOffset} data-focusoffset={entity.data.focusOffset} data-entity-id={entity.data.entityId} data-draftjs-entity-key={props.entityKey} data-offset-key={props.offsetKey} style={styles.linkedEntity}>{props.decoratedText}</span>
+    }
+
+    const compositeDecorator = new CompositeDecorator([{
+        strategy: entityStrategy,
+        component: entitySpan
+    }])
+
+    const [editorState, setEditorState] = React.useState(EditorState.createWithContent(ContentState.createFromText("\n\nEntity to link: Devon Aleshire\n\nAnother Entity to link: 555-555-5555\n\nAnother Entity to link: email@email.com"), compositeDecorator));//Initial State
 
     //Allows using key commands for Rich Styling Bold, Italic, Underline, and more.
     //https://draftjs.org/docs/quickstart-rich-styling
@@ -50,6 +85,63 @@ const DraftJsEditor = function DraftJsEditor() {
         setEditorState(newState);
     }
 
+    const setMetaData = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const selectionState = editorState.getSelection();
+        var anchorKey = selectionState.getAnchorKey();
+        var currentContent = editorState.getCurrentContent();
+        var currentContentBlock = currentContent.getBlockForKey(anchorKey);
+        var start = selectionState.getStartOffset();
+        var end = selectionState.getEndOffset();
+    }
+
+    const linkEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+        //Highlight Text
+        //const newState = RichUtils.toggleInlineStyle(currentState, 'HIGHLIGHT');
+
+        const contentState = editorState.getCurrentContent();
+        const entityId = 1;
+        const entityName = getSelectedText(editorState.getSelection(), editorState)
+
+        //Apply entity Id to ContentBlock
+        const newEditorState = createEntity(editorState.getSelection(), editorState, 1);
+
+        //Store Created Entity
+        linkedEntities.push({ id: entityId, entityKey: editorState.getCurrentContent().getLastCreatedEntityKey(), name: entityName })
+
+        refreshLinkedEntitesList();
+        setEditorState(newEditorState);
+    }
+
+    const unlinkEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        const unlinkEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
+            event.preventDefault();
+
+            const entityKey = "1";
+            const selectionState = editorState.getSelection();
+            const currentContent = editorState.getCurrentContent();
+
+            //Get Entity
+            const entity = currentContent.getEntity(entityKey)
+            const data = entity.getData()
+            console.log('Focus Offset: ', data.focusOffset)
+
+            //Unlink Entity
+            const newContentState = Modifier.applyEntity(currentContent, selectionState, null);
+            const newEditorState = EditorState.push(editorState, newContentState, 'undo')
+            setEditorState(newEditorState)
+        }
+    }
+
+    const removeEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+
+    }
+
+
     //Create custom style mapping for highlighting selected text
     const styleMap = {
         'HIGHLIGHT': {
@@ -60,6 +152,10 @@ const DraftJsEditor = function DraftJsEditor() {
         <div>
             <div className="tool-bar">
                 <button type="button" onClick={toggleLinkStyle}>Link Entity</button>
+                <button type="button" onClick={setMetaData}>Set Data to Element</button>
+                <button type="button" onClick={linkEntity}>Link Selected Entity</button>
+                <button type="button" onClick={unlinkEntity}>Unlink Entity</button>
+                <button type="button" onClick={removeEntity}>Remove Entity</button>
             </div>
             <div id="editor">
                 <Editor
@@ -82,13 +178,43 @@ function getSelectedText(selectionState: SelectionState, editorState: EditorStat
     return currentContentBlock.getText().slice(start, end);
 }
 
+function createEntity(selectionState: SelectionState, editorState: EditorState, entityId: Number) {
+    //Create Entity
+    const selectedText = getSelectedText(selectionState, editorState)
+    const currentContent = editorState.getCurrentContent();
+    const newContentState = currentContent.createEntity('LINKED-ENTITY', 'MUTABLE', { selectedText: selectedText, entityId: entityId, anchorOffset: selectionState.getAnchorOffset(), focusOffset: selectionState.getFocusOffset() });
+    console.log(`Entity Key: ${newContentState.getLastCreatedEntityKey()}`)
+    const textWithEntity = Modifier.applyEntity(newContentState, selectionState, newContentState.getLastCreatedEntityKey());
+    const newEditorState = EditorState.push(editorState, textWithEntity, 'apply-entity')
+
+    //Get Created Entity
+    const e = editorState.getCurrentContent().getEntity(textWithEntity.getLastCreatedEntityKey())
+    return newEditorState;
+}
+
+const refreshLinkedEntitesList = function () {
+
+    //document.querySelectorAll("span.linked-entity").forEach((entity) => {
+    //    const id = $(entity).data("entity-id")
+
+    //    if (!linkedEntities.find(x => x.id === id)) {
+    //        const entity = allEntities.find(x => x.id === id)
+    //        const name = entity.name
+
+    //        linkedEntities.push({ id: id, name: name })
+    //    }
+    //})
+
+    linkedEntities.sort((x, y) => (x.name > y.name) ? 1 : -1)
+
+    let htmlString: string = ""
+
+    linkedEntities.forEach(x => {
+        htmlString += `<li data-linkedentityid="${x.id}" data-entitykey="${x.entityKey}">${x.name} <i class="fas fa-times unlink"></i></li>`
+    })
+
+    document.getElementById("linkedEntitiesList").innerHTML = htmlString
+}
 ReactDOM.render(<DraftJsEditor />, document.getElementById('textEditor'))
 
-//export default DraftJsEditor;
-
-
-//import * as $ from 'jquery';
-//import * as React from 'react';
-//import * as ReactDOM from "react-dom";
-//import DraftJsEditor from "./components/DraftJsPOC";
 
