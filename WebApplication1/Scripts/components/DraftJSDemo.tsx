@@ -2,6 +2,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom'
 import { Editor, EditorState, RichUtils, DraftHandleValue, ContentState, SelectionState, Modifier, CompositeDecorator } from 'draft-js';
+import getRangesForDraftEntity from 'draft-js/lib/getRangesForDraftEntity'
 
 const allEntities = [
     { id: 101, name: "Bugs Bunny" },
@@ -115,8 +116,6 @@ const DraftJsEditor = function DraftJsEditor() {
         setEditorState(newEditorState);
     }
 
-    const unlinkEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
         const unlinkEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
             event.preventDefault();
 
@@ -134,10 +133,51 @@ const DraftJsEditor = function DraftJsEditor() {
             const newEditorState = EditorState.push(editorState, newContentState, 'undo')
             setEditorState(newEditorState)
         }
-    }
 
     const removeEntity = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
+
+        const entityKey = "1";
+        const selectionState = editorState.getSelection();
+        const contentState = editorState.getCurrentContent();
+
+        //Get Entity
+        const entity = contentState.getEntity(entityKey)
+        const data = entity.getData()
+        console.log(`Selection State: ${data.selectionState}`)
+
+        //Unlink Entity
+        const newContentState = Modifier.applyEntity(contentState, data.selectionState, null);
+        const newEditorState = EditorState.push(editorState, newContentState, 'apply-entity')
+        setEditorState(newEditorState)
+
+        //const offsetKey = data.offsetKey;
+        //const anchorOffset = data.anchorOffset;
+        //const focusOffset = data.focusOffset;
+
+        //console.log(`Anchor Offset: ${anchorOffset}`)
+        //console.log(`Focus Offset: ${focusOffset}`)
+        //console.log(`Offset Key: ${data.offsetKey}`)
+
+        ////Set the selection context
+        //const block = contentState.getBlockForKey(data.offsetKey);
+        //const blockKey = block.getKey();
+
+        //console.log(`Block Key: ${blockKey}`)
+
+        //let entitySelection;
+        //getRangesForDraftEntity(block, blockKey).forEach((range) => {
+        //    if (range.start <= anchorOffset && anchorOffset <= range.end) {
+        //        entitySelection = new SelectionState({
+        //            anchorOffset: range.start,
+        //            anchorKey: blockKey,
+        //            focusOffset: range.end,
+        //            focusKey: blockKey,
+        //            isBackward: false,
+        //            hasFocus: selectionState.getHasFocus(),
+        //        });
+        //    }
+        //});
 
     }
 
@@ -182,7 +222,7 @@ function createEntity(selectionState: SelectionState, editorState: EditorState, 
     //Create Entity
     const selectedText = getSelectedText(selectionState, editorState)
     const currentContent = editorState.getCurrentContent();
-    const newContentState = currentContent.createEntity('LINKED-ENTITY', 'MUTABLE', { selectedText: selectedText, entityId: entityId, anchorOffset: selectionState.getAnchorOffset(), focusOffset: selectionState.getFocusOffset() });
+    const newContentState = currentContent.createEntity('LINKED-ENTITY', 'MUTABLE', { selectedText: selectedText, entityId: entityId, anchorOffset: selectionState.getAnchorOffset(), focusOffset: selectionState.getFocusOffset(), selectionState: selectionState });
     console.log(`Entity Key: ${newContentState.getLastCreatedEntityKey()}`)
     const textWithEntity = Modifier.applyEntity(newContentState, selectionState, newContentState.getLastCreatedEntityKey());
     const newEditorState = EditorState.push(editorState, textWithEntity, 'apply-entity')
